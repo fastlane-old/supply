@@ -44,6 +44,11 @@ module Supply
                                      verify_block: proc do |value|
                                        raise "Could not find p12 file at path '#{File.expand_path(value)}'".red unless File.exist?(File.expand_path(value))
                                      end),
+        FastlaneCore::ConfigItem.new(key: :passphrase,
+                                     short_option: "-x",
+                                     env_name: "SUPPLY_KEYSTORE_PW",
+                                     description: "Keystore password",
+                                     default_value: CredentialsManager::AppfileConfig.try_fetch_value(:keystore_pw)),
         FastlaneCore::ConfigItem.new(key: :issuer,
                                      short_option: "-i",
                                      env_name: "SUPPLY_ISSUER",

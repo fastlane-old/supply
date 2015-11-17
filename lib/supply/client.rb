@@ -22,9 +22,7 @@ module Supply
     # @param path_to_key: The path to your p12 file
     # @param issuer: Email addresss for oauth
     # @param passphrase: Passphrase for the p12 file
-    def initialize(path_to_key: nil, issuer: nil, passphrase: nil)
-      passphrase ||= "notasecret"
-
+    def initialize(path_to_key: nil, issuer: nil, passphrase: "notasecret")
       key = Google::APIClient::KeyUtils.load_from_pkcs12(File.expand_path(path_to_key), passphrase)
 
       begin
