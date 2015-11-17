@@ -83,7 +83,8 @@ module Supply
 
     def client
       @client ||= Client.new(path_to_key: Supply.config[:key],
-                                   issuer: Supply.config[:issuer])
+                                  issuer: Supply.config[:issuer],
+                              passphrase: Supply.config[:passphrase])
     end
 
     def metadata_path
