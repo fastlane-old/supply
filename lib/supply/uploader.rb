@@ -24,9 +24,21 @@ module Supply
 
       upload_binary unless Supply.config[:skip_upload_apk]
 
+      promote_track
+
       Helper.log.info "Uploading all changes to Google Play..."
       client.commit_current_edit!
       Helper.log.info "Successfully finished the upload to Google Play".green
+    end
+
+    def promote_track
+      if Supply.config[:track_promote_to]
+        version_codes = client.track_version_codes(Supply.config[:track])
+        for apk_version_code in version_codes
+          client.update_track(Supply.config[:track], 1.0, nil)
+          client.update_track(Supply.config[:track_promote_to], 1.0, apk_version_code)
+        end
+      end
     end
 
     def upload_changelogs(language)

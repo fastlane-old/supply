@@ -252,10 +252,16 @@ module Supply
     def update_track(track, rollout, apk_version_code)
       ensure_active_edit!
 
+      apk_version_codes = []
+
+      unless apk_version_code.nil?
+        apk_version_codes.push(apk_version_code)
+      end 
+
       track_body = {
         'track' => track,
         'userFraction' => rollout,
-        'versionCodes' => [apk_version_code]
+        'versionCodes' => apk_version_codes
       }
 
       result_update = api_client.execute(
@@ -270,6 +276,24 @@ module Supply
         authorization: auth_client)
 
       raise result_update.error_message.red if result_update.error?
+    end
+
+    def track_version_codes(track)
+      ensure_active_edit!
+
+      result = api_client.execute(
+        api_method: android_publisher.edits.tracks.get,
+        parameters: {
+          'editId' => current_edit.data.id,
+          'packageName' => current_package_name,
+          'track' => track
+        },
+        authorization: auth_client
+      )
+
+      raise result.error_message.red if result.error? && result.status != 404
+
+      return result.data.versionCodes
     end
 
     def update_apk_listing_for_language(apk_listing)
