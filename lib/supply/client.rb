@@ -256,7 +256,7 @@ module Supply
 
       unless apk_version_code.nil?
         apk_version_codes.push(apk_version_code)
-      end 
+      end
 
       track_body = {
         'track' => track,
